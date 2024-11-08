@@ -22,12 +22,8 @@ $rol = isset($_SESSION['rol']) ? $_SESSION['rol'] : 'usuario'; // Si no se defin
             margin-top: 10px;
         }
 
-        .offcanvas-body {
-            display: flex;
-            justify-content: center; /* Centrar horizontalmente */
-            align-items: center; /* Centrar verticalmente */
-            height: 100%; /* Asegura que el contenedor ocupe todo el espacio disponible */
-        }
+        
+        
 
         .nav-tabs {
             justify-content: center; /* Asegurarse de que las pestañas también estén centradas */
@@ -54,6 +50,34 @@ $rol = isset($_SESSION['rol']) ? $_SESSION['rol'] : 'usuario'; // Si no se defin
         font-size: 12px;
         font-weight: bold;
     }
+    /*Nuevo bloque de estilos para los iconos */
+    /* Tamaño de los iconos */
+    .nav-item i {
+            font-size: 1.3rem; /* Aumenta el tamaño de los iconos */
+            margin-right: 3px; /* Espacio entre el icono y el texto */
+        }
+
+        /* Alineación en pares */
+        .offcanvas-body .nav-tabs {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); /* Dos columnas */
+            gap: 10px; /* Espacio entre los elementos */
+            justify-items: center; /* Alinear cada elemento al centro */
+        }
+
+        /* Permitir desplazamiento */
+        .offcanvas-body {
+            overflow-y: auto; /* Habilita el desplazamiento vertical */
+            max-height: 80vh; /* Limita la altura para que se ajuste al viewport */
+        }
+
+        /* Ajuste del botón de cierre */
+        .offcanvas-header .btn-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+
     </style>
 </head>
 <body>
@@ -86,33 +110,42 @@ $rol = isset($_SESSION['rol']) ? $_SESSION['rol'] : 'usuario'; // Si no se defin
                     <!-- Menú de navegación -->
                     <ul class="nav nav-tabs">
                     <li class="nav-item">
-                            <a class="nav-link active" href="./procesar_entrada_salida.html">Registro de E/S</a>
+                            <a class="nav-link active" href="./procesar_entrada_salida.html">
+                            <i class="bi bi-journal"></i>Registro de E/S</a>
                         </li>
                         <!-- Mostrar las opciones de actualización solo si el rol es admin -->
                         <?php if ($rol === 'admin'): ?>
                         <li class="nav-item">
-                            <a class="nav-link active" href="./Controladores/actualizacionesempleado.php">Cátalago de Empleados</a>
+                            <a class="nav-link active" href="./Controladores/actualizacionesempleado.php">
+                            <i class="bi bi-book"></i>Cátalago de Empleados</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active" href="./Controladores/actualizacionesproveedor.php">Cátalago de Proveedores</a>
+                            <a class="nav-link active" href="./Controladores/actualizacionesproveedor.php">
+                            <i class="bi bi-book"></i>Cátalago de Proveedores</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active" href="./Controladores/actualizacionesinvitado.php">Cátalago de Invitados</a>
+                            <a class="nav-link active" href="./Controladores/actualizacionesinvitado.php">
+                            <i class="bi bi-book"></i>Cátalago de Invitados</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active" href="./Controladores/actualizacionesusuario.php">Cátalago de Usuarios</a>
+                            <a class="nav-link active" href="./Controladores/actualizacionesusuario.php">
+                            <i class="bi bi-book"></i>Cátalago de Usuarios</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active" href="./Controladores/asistenciaempleado.php"> Asistencia Empleado</a>
+                            <a class="nav-link active" href="./Controladores/asistenciaempleado.php">
+                            <i class="bi bi-journal-check"></i>Asistencia Empleado</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active" href="./Controladores/asistenciainvitado.php">Asistencia Invitado</a>
+                            <a class="nav-link active" href="./Controladores/asistenciainvitado.php">
+                            <i class="bi bi-journal-check"></i>Asistencia Invitado</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active" href="./Controladores/asistenciaproveedor.php"> Asistencia Proveedores</a>
+                            <a class="nav-link active" href="./Controladores/asistenciaproveedor.php">
+                            <i class="bi bi-journal-check"></i>Asistencia Proveedores</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active" href="./Controladores/actualizacionesempresa.php">Información de la Empresa</a>
+                            <a class="nav-link active" href="./Controladores/actualizacionesempresa.php">
+                            <i class="bi bi-info-circle"></i>Información de la Empresa</a>
                         </li>
                         <?php endif; ?>
                     </ul>

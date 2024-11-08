@@ -168,6 +168,14 @@ if (isset($_GET['habilitar']) || isset($_GET['deshabilitar'])) {
         </form>
         <?php endif; ?>
 
+        <div class="d-flex justify-content-end mb-2">
+        <!-- Enlace a la derecha con margen superior y mejor formato -->
+
+    <a href="../fpdf/reporteProveedor.php" target="_blank" class="btn btn-primary d-flex align-items-center ms-3 mt-3">
+        <i class="bi bi-file-earmark-pdf-fill me-2"></i> Generar Reporte
+    </a>
+</div>
+
         <!-- Tabla de proveedores -->
         <table class="table table-striped table-hover">
             <thead class="table-dark">
