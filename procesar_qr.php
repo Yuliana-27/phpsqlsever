@@ -25,6 +25,38 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $tipo = trim($qrParts[0]); // Tipo de usuario
             $identificador = trim($qrParts[1]); // Número de colaborador, proveedor o nombre
 
+            // Verificar si el QR ha expirado según el tipo de usuario
+            $fechaExpiracion = null;
+            if ($tipo == 'proveedor') {
+                $sql = "SELECT fecha_expiracion FROM proveedores WHERE proveedor = :identificador";
+            } elseif ($tipo == 'invitado') {
+                $sql = "SELECT fecha_expiracion FROM invitados WHERE nombre_apellido = :identificador";
+            } else {
+                $fechaExpiracion = null; // Los empleados tienen QR permanente, no se verifica la expiración
+            }
+
+            // Solo ejecutar la consulta de expiración si es un invitado o proveedor
+            if ($fechaExpiracion !== null) {
+                $stmt = $conn->prepare($sql);
+                $stmt->bindParam(':identificador', $identificador);
+                $stmt->execute();
+                $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                if ($result) {
+                    $fechaExpiracion = $result['fecha_expiracion'];
+                    if ($fechaExpiracion && new DateTime($fecha) > new DateTime($fechaExpiracion)) {
+                        // El QR ha expirado
+                        $response['message'] = "El código QR ha vencido.";
+                        echo json_encode($response);
+                        exit;
+                    }
+                } else {
+                    $response['message'] = "No se encontró el registro en la base de datos.";
+                    echo json_encode($response);
+                    exit;
+                }
+            }
+
             // Comenzar una transacción para garantizar que las operaciones se realicen de manera atómica
             $conn->beginTransaction();
 

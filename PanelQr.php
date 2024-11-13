@@ -17,10 +17,10 @@ if ($rol === 'admin') {
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Palladium Hotel Group</title>
-    <link rel="icon" href="../img/vista.png" type="image/png">
+    <link rel="icon" href="img/vista.png" type="image/png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <style>
@@ -181,6 +181,11 @@ if ($rol === 'admin') {
                         <label for="color" class="form-label">Color del Vehículo <span class="text-danger">*</span></label>
                         <input type="text" class="form-control" id="color" name="color" required>
                     </div>
+                    
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Enviar Codigo Qr al Correo <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="email" name="email" required>
+                    </div>
                     <button type="button" class="btn btn-primary" onclick="sendFormData('Registros/Empleado.php', 'registroEmpleadoForm')" >Registrar Empleado</button>
                 </form>
             `;
@@ -204,11 +209,13 @@ if ($rol === 'admin') {
                     </div>
 
                     <div class="mb-3">
-                    <label for="tipo_Qr" class="form-label">Tipo de Qr <span class="text-danger">*</span></label>
-                            <select class="form-control" id="tipo_Qr" name="tipo_Qr" required>
-                        <option value="" disabled selected>Selecciona una opción</option>
-                        <option value="temporal">Temporal</option>
-                            </select>
+                    <label for="duracion" class="form-label">Duración Del Qr<span class="text-danger">*</span></label>
+                        <select class="form-control" id="duracion" name="duracion" required>
+                            <option value="" disabled selected>Selecciona una opción</option>
+                            <option value="1">1 día</option>
+                            <option value="3">3 días</option>
+                            <option value="5">5 días</option>
+                        </select>
                     </div>
 
                     <div class="mb-3">
@@ -222,6 +229,10 @@ if ($rol === 'admin') {
                     <div class="mb-3">
                         <label for="color" class="form-label">Color del Vehículo <span class="text-danger">*</span></label>
                         <input type="text" class="form-control" id="color" name="color" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Enviar Codigo Qr al Correo <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="email" name="email" required>
                     </div>
                     <button type="button" class="btn btn-secondary" onclick="sendFormData('Registros/Invitado.php', 'registroInvitadoForm')">Registrar Invitado</button>
                 </form>
@@ -246,11 +257,13 @@ if ($rol === 'admin') {
                     </div>
 
                     <div class="mb-3">
-                    <label for="tipo_Qr" class="form-label">Tipo de Qr</label>
-                            <select class="form-control" id="tipo_Qr" name="tipo_Qr" required>
-                        <option value="" disabled selected>Selecciona una opción</option>
-                        <option value="temporal">Temporal</option>
-                            </select>
+                    <label for="duracion" class="form-label">Duración Del Qr<span class="text-danger">*</span></label>
+                        <select class="form-control" id="duracion" name="duracion" required>
+                            <option value="" disabled selected>Selecciona una opción</option>
+                            <option value="1">1 día</option>
+                            <option value="3">3 días</option>
+                            <option value="5">5 días</option>
+                        </select>
                     </div>
 
                     <div class="mb-3">
@@ -264,6 +277,10 @@ if ($rol === 'admin') {
                     <div class="mb-3">
                         <label for="color" class="form-label">Color del Vehículo</label>
                         <input type="text" class="form-control" id="color" name="color" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Enviar Codigo Qr al Correo <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="email" name="email" required>
                     </div>
                     <button type="button" class="btn btn-success" onclick="sendFormData('Registros/Proveedores.php', 'registroProveedorForm')">Registrar Proveedor</button>
                 </form>

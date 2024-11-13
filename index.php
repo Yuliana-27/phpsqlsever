@@ -50,11 +50,6 @@
                 <input type="password" class="form-control" name="password" id="pass">
             </div>
 
-            <div class="mb-3 form-check">
-                <input type="checkbox" name="connected" class="form-check-input">
-                <label for="connected" class="form-check-label">Mantener conexión</label>
-            </div>
-
             <div class="d-grid">
                 <button type="button" onclick="loguear()" class="btn btn-danger">Iniciar Sesión</button>
             </div>

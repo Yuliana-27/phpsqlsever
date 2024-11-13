@@ -176,6 +176,29 @@ if (isset($_GET['habilitar']) || isset($_GET['deshabilitar'])) {
     </a>
 </div>
 
+<!-- Modal para mostrar el QR a gran tamaño -->
+<div class="modal fade" id="modalQr" tabindex="-1" aria-labelledby="modalQrLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalQrLabel">Código QR</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="qrContainer" class="d-flex align-items-center">
+                    <!-- Imagen del QR a la izquierda -->
+                    <img src="" id="qrImage" alt="QR Code" class="img-fluid me-3" style="width: 150px; height: auto;">
+                    
+                    <!-- Información del empleado a la derecha -->
+                    <div id="qrInfo" style="text-align: left;">
+                        <!-- Los detalles se llenarán con JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
         <!-- Tabla de proveedores -->
         <table class="table table-striped table-hover">
             <thead class="table-dark">
@@ -200,7 +223,11 @@ if (isset($_GET['habilitar']) || isset($_GET['deshabilitar'])) {
                     <td><?php echo $row['placas_vehiculos']; ?></td>
                     <td><?php echo $row['modelo_marca']; ?></td>
                     <td><?php echo $row['color_vehiculo']; ?></td>
-                    <td><?php echo $row['qr_code']; ?></td>
+                    <td>
+                <a href="#" data-bs-toggle="modal" data-bs-target="#modalQr" onclick="showQr('<?php echo $row['qr_code']; ?>', '<?php echo $row['nombre_apellido']; ?>', '<?php echo $row['proveedor']; ?>')">
+                    <img src="<?php echo $row['qr_code']; ?>" alt="QR Code" width="50">
+                </a>
+            </td>
                     <td><?php echo $row['estado'] ? 'Habilitado' : 'Deshabilitado'; ?></td>
                     <td>
                         <a href="actualizacionesproveedor.php?id=<?php echo $row['id']; ?>" class="btn btn-warning btn-sm">
@@ -232,8 +259,24 @@ if (isset($_GET['habilitar']) || isset($_GET['deshabilitar'])) {
             <button class="btn btn-primary" onclick="location.reload()">Actualizar</button>
         </div>
 
-        <!-- Enlaces de Bootstrap JS -->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+        <script>
+    function showQr(qrImage, nombre, proveedor) {
+        // Establecer el QR de gran tamaño en el modal
+        document.getElementById("qrImage").src = qrImage;
+
+        // Mostrar la información correspondiente
+        document.getElementById("qrInfo").innerHTML = `
+            <strong>Nombre:</strong> ${nombre}<br>
+            <strong>Proveedor:</strong> ${proveedor}
+        `;
+    }
+</script>
+
+<!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Bootstrap JS y dependencias -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     </div>
 </body>
 </html>

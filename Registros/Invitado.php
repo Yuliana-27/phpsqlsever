@@ -1,6 +1,13 @@
 <?php
 require '../conexion.php';
 require '../phpqrcode/qrlib.php';
+require '../Email/Exception.php';
+require '../Email/PHPMailer.php';
+require '../Email/SMTP.php';
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
 
 header('Content-Type: application/json'); // Configuración para respuesta JSON
 
@@ -15,6 +22,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $placas = $_POST['placas'];
     $modeloMarca = $_POST['modelo_marca'];
     $color = $_POST['color'];
+    $duracion = intval($_POST['duracion']);
+    $email = $_POST['email']; // Correo electrónico al que se enviará el QR
 
     // Verificar si las placas ya están registradas en alguna de las tablas: empleados, invitados o proveedores
     $verificar_placas_empleados = $conn->prepare("SELECT * FROM empleados WHERE placas_vehiculo = :placas");
@@ -43,26 +52,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         exit;
     }
 
-    // Generar fecha de vencimiento para el QR (1, 3 o 5 días a partir de la fecha actual)
+    // Generar fecha de vencimiento para el QR según la duración seleccionada
     $fechaActual = new DateTime("now", new DateTimeZone("America/Cancun"));
-    $vencimiento = $fechaActual->modify('+5 days')->format('Y-m-d H:i:s'); // Cambia aquí el número de días según el requerimiento
+    $fechaExpiracion = $fechaActual->modify("+{$duracion} days")->format('Y-m-d H:i:s');
 
     // Generar el contenido del código QR
-    $contenidoQR = "invitado $nombre \n$areaAsiste \n$placas \n$modeloMarca ($color) Vence el: $vencimiento";
+    $contenidoQR = "invitado $nombre \n$areaAsiste \n$placas \n$modeloMarca ($color) \nVence el: $fechaExpiracion";
     $filename = "../img_qr/qr_". $nombre . ".png";
 
     QRcode::png($contenidoQR, $filename, QR_ECLEVEL_L, 4);
 
-    // Preparar la respuesta con la URL del código QR para mostrar y descargar
-    $response = [
-        "status" => "success",
-        "message" => "Invitado registrado con éxito.",
-        "qr_code_url" => "img_qr/qr_" . $nombre . ".png"
-    ];
-
     // Insertar en la base de datos
-    $sql = "INSERT INTO invitados (nombre_apellido, area_asistencia, placas_vehiculo, modelo_marca, color_vehiculo, qr_code) 
-            VALUES (:nombre, :areaAsiste, :placas, :modeloMarca, :color, :qr_code)";
+    $sql = "INSERT INTO invitados (nombre_apellido, area_asistencia, placas_vehiculo, modelo_marca, color_vehiculo, qr_code, fecha_expiracion) 
+            VALUES (:nombre, :areaAsiste, :placas, :modeloMarca, :color, :qr_code, :fechaExpiracion)";
     
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':nombre', $nombre);
@@ -71,10 +73,43 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $stmt->bindParam(':modeloMarca', $modeloMarca);
     $stmt->bindParam(':color', $color);
     $stmt->bindParam(':qr_code', $filename);
+    $stmt->bindParam(':fechaExpiracion', $fechaExpiracion); // Nueva columna para almacenar la fecha de expiración
 
     if ($stmt->execute()) {
-        $response["status"] = "success";
-        $response["message"] = "Invitado registrado con éxito.";
+        // Enviar el correo con el QR adjunto
+        $mail = new PHPMailer(true);
+        try {
+            // Configuración del servidor SMTP
+            $mail->isSMTP();
+            $mail->Host       = 'smtp.gmail.com';
+            $mail->SMTPAuth   = true;
+            $mail->Username   = 'isc20350250@gmail.com';  // Tu correo
+            $mail->Password   = 'bwfzbxzrscmwgzmx';             // Contraseña de aplicación
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+            $mail->Port       = 587;
+
+            // Remitente y destinatario
+            $mail->setFrom('isc20350250@gmail.com', 'Yuliana del Carmen Altamirano Montes');
+            $mail->addAddress($email, $nombre);
+
+            // Contenido del correo
+            $mail->isHTML(true);
+            $mail->Subject = 'Tu Codigo QR de Acceso';
+            $mail->Body    = "Estimado/a $nombre,<br><br>A continuación, encontrarás tu código QR para acceder a las instalaciones.";
+            $mail->AltBody = "Estimado/a $nombre, adjunto encontrarás tu código QR para acceder a las instalaciones.";
+
+            // Adjuntar el código QR
+            $mail->addAttachment($filename,'CodigoQR.png');
+
+            // Enviar el correo
+            $mail->send();
+
+            $response["status"] = "success";
+            $response["message"] = "Invitado registrado con éxito. El QR ha sido enviado por correo.";
+            $response["qr_code_url"] = "img_qr/qr_" . $nombre . ".png";
+        } catch (Exception $e) {
+            $response['message'] = 'No se pudo enviar el correo. Error: ' . $mail->ErrorInfo;
+        }
     } else {
         $response['message'] = "Error al registrar: " . implode(" - ", $stmt->errorInfo());
     }
