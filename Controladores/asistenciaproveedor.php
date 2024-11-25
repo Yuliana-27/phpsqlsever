@@ -77,6 +77,16 @@ $asistencias = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </a>
         </div>
 
+        <div class="d-flex justify-content-end mb-2">
+    <form method="POST" action="../fpdf/Reporte3.php" target="_blank" class="d-flex align-items-center ms-3 mt-3">
+        <input type="date" name="fecha_inicio" class="form-control me-2" required>
+        <input type="date" name="fecha_fin" class="form-control me-2" required>
+        <button type="submit" class="btn btn-secondary">
+            <i class="bi bi-calendar2-range-fill me-2"></i> R.Fecha
+        </button>
+    </form>
+</div>
+
         <!-- Formulario para eliminación múltiple -->
         <form method="POST">
             <!-- Tabla de asistencia -->

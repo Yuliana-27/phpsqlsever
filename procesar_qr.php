@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if ($qrData && $action && in_array($action, ['entrada', 'salida'])) {
         
         // Intentar descomponer el contenido del QR (si el formato es esperado)
-        $qrParts = explode(' ', $qrData);
+        $qrParts = explode('|', $qrData);
         
         // Verificar que el QR tenga el formato correcto (mínimo 1 parte: número de colaborador, proveedor o invitado)
         if (count($qrParts) > 1) {

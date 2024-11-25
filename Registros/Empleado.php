@@ -52,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     // Generar el contenido del código QR siempre y cuando no existan las placas
-    $contenidoQR = "empleado $numeroColaborador \n$nombre \n$area \n$placas \n$modeloMarca ($color)";
+    $contenidoQR = "empleado|$numeroColaborador|\n$nombre|\n$area|\n$placas|\n$modeloMarca|$color";
     $filename = "../img_qr/qr_" . $numeroColaborador . ".png";
 
     QRcode::png($contenidoQR, $filename, QR_ECLEVEL_L, 4);
@@ -90,8 +90,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // Contenido del correo
             $mail->isHTML(true);
             $mail->Subject = 'Tu Codigo QR de Acceso';
-            $mail->Body    = "Estimado/a $nombre,<br><br>A continuación, encontrarás tu código QR para acceder a las instalaciones.";
-            $mail->AltBody = "Estimado/a $nombre, adjunto encontrarás tu código QR para acceder a las instalaciones.";
+            $mail->Body = "Estimado/a $nombre,<br><br>
+
+    
+                Se le envía su código QR para poder entrar a las instalaciones del Hotel Palladium.<br><br> 
+                <b>Formulario de Invitación:</b>
+                Puede Enviar Este Link  A Las Personas Que Quiera Invitar<br><br>
+                Una vez que hayamos recibido su información, le enviaremos su código QR para acceder a nuestras instalaciones<br><br>
+                https://docs.google.com/forms/d/e/1FAIpQLSc2OHUEju_tsaLvo8Aj-GoAmI7j_rvtei0tT_VKyV9pNyo8pw/viewform?usp=sf_link";
+                
+
+            $mail->AltBody = "Estimado/a $nombre, para completar tu registro y recibir tu pase de entrada, llena el siguiente formulario:\n
+                            Formulario de Invitación: https://forms.gle/tu-enlace-aqui\n
+                            Una vez que hayamos recibido tu información, te enviaremos tu código QR.";
+
+
 
             // Adjuntar el código QR
             $mail->addAttachment($filename,'CodigoQR.png');

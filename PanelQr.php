@@ -3,17 +3,26 @@ session_start();
 $rol = $_SESSION['rol']; // Asegúrate de guardar el rol cuando el usuario inicie sesión
 
 if ($rol === 'admin') {
-    // Mostrar las opciones de agregar, actualizar y eliminar
+    // Mostrar solo la opción de registro
     echo '<a href="panelqr.php">Agregar</a>';
-    echo '<a href="actualizacionesempleado.php"></a>';
-    echo '<a href="actualizacionesinvitado.php"></a>';
-    echo '<a href="actualizacionesproveedor.php"></a>';
-    echo '<a href="actualizacionesusuario.php"></a>';
+    echo '<a href="actualizacionesempleado.php">Actualizar Empleados</a>';
+    echo '<a href="actualizacionesinvitado.php">Actualizar Invitados</a>';
+    echo '<a href="actualizacionesproveedor.php">Actualizar Proveedores</a>';
+    echo '<a href="actualizacionesusuario.php">Actualizar Usuarios</a>';
+    echo '<a href="asistenciaempleado.php">Asistencia Empleados</a>';
+    echo '<a href="asistenciainvitado.php">Asistencia Invitados</a>';
+    echo '<a href="asistenciaproveedor.php">Asistencia Proveedores</a>';
+    echo '<a href="procesar_entrada_salida.html">Registro</a>';
+} elseif ($rol === 'operador') {
+    // Mostrar todas las opciones
+    echo '<a href="procesar_entrada_salida.html">Registro</a>';
 } elseif ($rol === 'usuario') {
-    // Mostrar solo la opción de agregar
-    echo '<a href="panelqr.php"></a>';
+    // Mostrar solo la opción de agregar invitados y proveedores
+    echo '<a href="panelqr.php">Agregar Invitados</a>';
+
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -31,6 +40,10 @@ if ($rol === 'admin') {
 </head>
 <body>
     <?php
+    ob_start();
+    if(!isset($_SESSION["nombre"])) {
+        header("Location: index.php");
+    } else
     // Incluir la conexión a la base de datos
     require 'conexion.php';
     require 'phpqrcode/qrlib.php'; // Librería PHP QR Code
@@ -52,25 +65,31 @@ if ($rol === 'admin') {
             <img src="img/pbh-logo.png" width="55" alt="">
         </div>
 
+        <?php if ($rol !== 'operador'): ?>
     <div class="container">
     <h2 class="text-center mb-4">Panel de Registro</h2>
-
+        
         <!-- Selector de tipo de registro -->
         <div class="text-center mb-5">
             <h4>Seleccione el tipo de usuario a registrar:</h4>
             <div class="btn-group" role="group" aria-label="Opciones de Registro">
+            
                 <button  class="btn btn-outline-primary" id="btnEmpleado">Registrar Empleado</button>
+            
                 <button  class="btn btn-outline-secondary" id="btnInvitado">Registrar Invitado</button>
                 <button  class="btn btn-outline-success" id="btnProveedor">Registrar Proveedor</button>
             </div>
-        </div>
 
         <!--aqui cierra el contendor de registro dinamico como el del registro-->
         <!-- Formulario dinámico que se mostrará según la selección -->
         <div id="formContainer" class="p-4 shadow rounded bg-white"></div>
         
     </div>
-
+    <?php else: ?>
+        <!-- Mensaje alternativo para el operador -->
+        
+        <?php endif; ?>
+        </div>
     <!-- Script para manejar los formularios -->
     <script>
 
@@ -192,6 +211,7 @@ if ($rol === 'admin') {
         }
 
         // Formulario de registro de invitados
+    
         function formInvitado() {
             clearForm();
             formContainer.innerHTML = `
@@ -286,12 +306,22 @@ if ($rol === 'admin') {
                 </form>
             `;
         }
+        
 
         // Asignar eventos a los botones
         btnEmpleado.addEventListener('click', formEmpleado);
-        btnInvitado.addEventListener('click', formInvitado);
-        btnProveedor.addEventListener('click', formProveedor);
+        // Rol usuario: Solo habilitamos formularios de invitado y proveedor
+if (btnInvitado) {
+    btnInvitado.addEventListener('click', formInvitado);
+}
+if (btnProveedor) {
+    btnProveedor.addEventListener('click', formProveedor);
+}
+
     </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>
+<?php}
+ob_end_flush();
+?>

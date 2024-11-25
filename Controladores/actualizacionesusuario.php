@@ -90,6 +90,7 @@ $usuarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <option value="" disabled selected>Seleccione un rol</option>
         <option value="admin" <?php if ($usuario['rol'] == 'admin') echo 'selected'; ?>>Admin</option>
         <option value="usuario" <?php if ($usuario['rol'] == 'usuario') echo 'selected'; ?>>Usuario</option>
+        <option value="operador" <?php if ($usuario['rol'] == 'operador') echo 'selected'; ?>>Operador</option>
     </select>
 </div>
 

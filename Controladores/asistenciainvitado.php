@@ -70,13 +70,24 @@ $asistencias = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </div>
         </form>
 
-        <!-- Formulario para eliminar seleccionados -->
-        <form method="POST" action="asistenciainvitado.php">
+        
             <div class="d-flex justify-content-end mb-2">
                 <a href="../fpdf/reporteAsistenciainvitado.php" target="_blank" class="btn btn-primary d-flex align-items-center ms-3 mt-3">
                     <i class="bi bi-file-earmark-pdf-fill me-2"></i> Generar Reporte
                 </a>
+                
             </div>
+
+            <div class="d-flex justify-content-end mb-2">
+    <form method="POST" action="../fpdf/Reporte2.php" target="_blank" class="d-flex align-items-center ms-3 mt-3">
+        <input type="date" name="fecha_inicio" class="form-control me-2" required>
+        <input type="date" name="fecha_fin" class="form-control me-2" required>
+        <button type="submit" class="btn btn-secondary">
+            <i class="bi bi-calendar2-range-fill me-2"></i> R.Fecha
+        </button>
+    </form>
+</div>
+
 
             <!-- Tabla de asistencia -->
             <table class="table table-striped table-hover">

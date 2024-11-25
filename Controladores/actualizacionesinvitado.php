@@ -3,6 +3,8 @@
 require '../conexion.php';
 // Incluir la librería PHP QR Code
 include('../phpqrcode/qrlib.php');
+session_start();
+$rol = $_SESSION['rol']; // Obtener el rol del usuario
 
 // Búsqueda de invitado
 $searchTerm = '';
@@ -11,13 +13,15 @@ if (isset($_POST['search'])) {
 }
 
 // Actualizar invitado
-if (isset($_POST['actualizar'])) {
+if ($rol === 'admin' && isset($_POST['actualizar'])) {
     $id_ = $_POST['id'];
     $nombre_apellido_ = $_POST['nombre_apellido'];
     $area_asistencia_ = $_POST['area_asistencia'];
     $placas_vehiculo_ = $_POST['placas_vehiculo'];
     $modelo_marca_ = $_POST['modelo_marca'];
     $color_vehiculo_ = $_POST['color_vehiculo'];
+    $fecha_expiracion_ = $_POST['fecha_expiracion'];
+
 
     // Verificar si las placas ya están registradas en otro invitado
     $sql = "SELECT COUNT(*) FROM invitados WHERE placas_vehiculo = ? AND id != ?";
@@ -52,7 +56,7 @@ if (isset($_POST['actualizar'])) {
         }
 
         // Generar el contenido del QR usando los datos actualizados
-        $qrContent = "invitado $nombre_apellido_ \nAsistencia: $area_asistencia_ \nPlacas: $placas_vehiculo_ \nVehículo: $modelo_marca_ ($color_vehiculo_)";
+        $qrContent = "invitado|$nombre_apellido_|\nAsistencia:$area_asistencia_|\nPlacas:$placas_vehiculo_|\nVehículo:$modelo_marca_|\n$color_vehiculo_";
 
         // Actualizar el contenido del QR (sobrescribir el archivo QR existente)
         QRcode::png($qrContent, $newQrFilePath);
@@ -61,10 +65,10 @@ if (isset($_POST['actualizar'])) {
         $qr_code_ = $newQrFilePath;
 
         // Actualizar la información del invitado
-        $sql = "UPDATE invitados SET nombre_apellido = ?, area_asistencia = ?, placas_vehiculo = ?, modelo_marca = ?, color_vehiculo = ?, qr_code = ? WHERE id = ?";
+        $sql = "UPDATE invitados SET nombre_apellido = ?, area_asistencia = ?, placas_vehiculo = ?, modelo_marca = ?, color_vehiculo = ?, fecha_expiracion = ?, qr_code = ? WHERE id = ?";
         $stmt = $conn->prepare($sql);
         
-        if ($stmt->execute([$nombre_apellido_, $area_asistencia_, $placas_vehiculo_, $modelo_marca_, $color_vehiculo_, $qr_code_, $id_])) {
+        if ($stmt->execute([$nombre_apellido_, $area_asistencia_, $placas_vehiculo_, $modelo_marca_, $color_vehiculo_, $fecha_expiracion_, $qr_code_, $id_])) {
             echo "<div class='alert alert-success' role='alert'>Invitado y código QR actualizados correctamente</div>";
         } else {
             echo "<div class='alert alert-danger' role='alert'>Error al actualizar el invitado</div>";
@@ -74,7 +78,7 @@ if (isset($_POST['actualizar'])) {
 
 
 // Eliminar invitado
-if (isset($_GET['eliminar'])) {
+if (isset($_GET['eliminar']) && $rol === 'admin') {
     $id = $_GET['eliminar'];
 
     $sql = "DELETE FROM invitados WHERE id = ?";
@@ -88,14 +92,14 @@ if (isset($_GET['eliminar'])) {
 }
 
 // Habilitar/Deshabilitar invitado
-if (isset($_GET['deshabilitar'])) {
+if (isset($_GET['deshabilitar']) && $rol === 'admin') {
     $id = $_GET['deshabilitar'];
     $sql = "UPDATE invitados SET estado = 0 WHERE id = ?";
     $stmt = $conn->prepare($sql);
     $stmt->execute([$id]);
 }
 
-if (isset($_GET['habilitar'])) {
+if (isset($_GET['habilitar']) && $rol === 'admin') {
     $id = $_GET['habilitar'];
     $sql = "UPDATE invitados SET estado = 1 WHERE id = ?";
     $stmt = $conn->prepare($sql);
@@ -103,7 +107,7 @@ if (isset($_GET['habilitar'])) {
 }
 
 // Obtener invitados
-$sql = "SELECT id, nombre_apellido, area_asistencia, placas_vehiculo, modelo_marca, color_vehiculo, qr_code, estado FROM invitados";
+$sql = "SELECT id, nombre_apellido, area_asistencia, placas_vehiculo, modelo_marca, color_vehiculo, fecha_expiracion, qr_code, estado FROM invitados";
 if (!empty($searchTerm)) {
     $sql .= " WHERE nombre_apellido LIKE ?";
     $stmt = $conn->prepare($sql);
@@ -177,6 +181,7 @@ $invitados = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <div class="d-flex justify-content-end mb-2">
         <!-- Enlace a la derecha con margen superior y mejor formato -->
 
+
     <a href="../fpdf/reporteInvitado.php" target="_blank" class="btn btn-primary d-flex align-items-center ms-3 mt-3">
         <i class="bi bi-file-earmark-pdf-fill me-2"></i> Generar Reporte
     </a>
@@ -214,7 +219,8 @@ $invitados = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <th>Área de Asistencia</th>
                     <th>Placas del Vehículo</th>
                     <th>Modelo y Marca</th>
-                    <th>Color del Vehículo</th>
+                    <th>Color</th>
+                    <th>Fecha Expiración</th>
                     <th>QR</th>
                     <th>Estado</th>
                     <th>Acciones</th>
@@ -229,11 +235,13 @@ $invitados = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <td><?php echo $row['placas_vehiculo']; ?></td>
                     <td><?php echo $row['modelo_marca']; ?></td>
                     <td><?php echo $row['color_vehiculo']; ?></td>
+                    <td><?php echo $row['fecha_expiracion']; ?></td>
                     <td>
-                <a href="#" data-bs-toggle="modal" data-bs-target="#modalQr" onclick="showQr('<?php echo $row['qr_code']; ?>', '<?php echo $row['nombre_apellido']; ?>', '<?php echo $row['area_asistencia']; ?>')">
+                <a href="#" data-bs-toggle="modal" data-bs-target="#modalQr" onclick="showQr('<?php echo $row['qr_code']; ?>', '<?php echo $row['nombre_apellido']; ?>', '<?php echo $row['area_asistencia']; ?>', '<?php echo $row['fecha_expiracion']; ?>')">
                     <img src="<?php echo $row['qr_code']; ?>" alt="QR Code" width="50">
                 </a>
             </td> 
+            <?php if ($rol === 'admin'): ?>
                     <td><?php echo $row['estado'] ? 'Habilitado' : 'Deshabilitado'; ?></td>
                     <td>
                         <a href="actualizacionesinvitado.php?id=<?php echo $row['id']; ?>" class="btn btn-warning btn-sm">
@@ -252,6 +260,9 @@ $invitados = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <i class="bi bi-toggle-on"></i>
                         </a>
                         <?php endif; ?>
+                        <?php else: ?>
+                
+                <?php endif; ?>
                     </td>
                 </tr>
                 <?php endforeach; ?>
@@ -267,14 +278,15 @@ $invitados = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </div>
 
         <script>
-    function showQr(qrImage, nombre, area_asistencia) {
+    function showQr(qrImage, nombre, area_asistencia, fecha_expiracion) {
         // Establecer el QR de gran tamaño en el modal
         document.getElementById("qrImage").src = qrImage;
 
         // Mostrar la información correspondiente
         document.getElementById("qrInfo").innerHTML = `
             <strong>Nombre:</strong> ${nombre}<br>
-            <strong>Área:</strong> ${area_asistencia}
+            <strong>Área:</strong> ${area_asistencia}<br>
+            <strong>Fecha:</strong> ${fecha_expiracion}
         `;
     }
 </script>

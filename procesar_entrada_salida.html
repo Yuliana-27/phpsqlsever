@@ -60,34 +60,41 @@
         }
 
         function setAction(actionType) {
-            document.getElementById('action').value = actionType;
-            
-            //Enviar datos con AJAX
-            const formData = new FormData(document.getElementById("qr-form"));
+    document.getElementById('action').value = actionType;
+    const qrData = document.getElementById("qr_data").value; // Obtener el QR escaneado
 
-            fetch('procesar_qr.php',{
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success){
-                    const alertMessage = actionType === 'entrada' ? 'Entrada Registrada Correctamente' : 'Salida Registrada Correctamente';
-                    showAlert(alertMessage, 'success');
-                }else {
-                    showAlert(data.message, 'danger');
-                }
+    if (!qrData) {
+        showAlert("No se ha escaneado un código QR.", 'danger');
+        return;
+    }
 
-                //Recargar la pagina despues de 3.5 segundos, despues de mostrar el mensaje
-                setTimeout(() => {
-                    window.location.reload();
-                }, 3500);
-            })
-            .catch(error => {
-                console.error('Error en la Solicitud:', error)
-                showAlert("Error en la solicitud", 'danger');
-            });
+    // Enviar datos con AJAX
+    const formData = new FormData(document.getElementById("qr-form"));
+
+    fetch('procesar_qr.php',{
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            const alertMessage = actionType === 'entrada' ? 'Entrada Registrada Correctamente' : 'Salida Registrada Correctamente';
+            showAlert(alertMessage, 'success');
+        } else {
+            showAlert(data.message, 'danger');
         }
+
+        // Recargar la pagina después de 3.5 segundos, después de mostrar el mensaje
+        setTimeout(() => {
+            window.location.reload();
+        }, 3500);
+    })
+    .catch(error => {
+        console.error('Error en la Solicitud:', error);
+        showAlert("Error en la solicitud", 'danger');
+    });
+}
+
 
         function showAlert(message, type){
             const alertDiv = document.getElementById("alert-float");

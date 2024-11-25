@@ -61,6 +61,24 @@
 
         </form>
     </div>
+    <footer style="
+    text-align: center; 
+    padding: 15px; 
+    background: linear-gradient(90deg, #4b79a1, #283e51); 
+    color: white; 
+    font-family: Arial, sans-serif; 
+    font-size: 14px; 
+    border-top: 3px solid #ffdd57;">
+    <p style="margin: 0;">
+        © <?php echo date('Y'); ?> <strong>Yuliana del Carmen & Gerardo Luis</strong>. Todos los derechos reservados.
+    </p>
+    <p style="margin: 5px 0 0;">
+        <a href="terminos.php" style="color: #ffdd57; text-decoration: none;">Términos de uso</a> |
+        <a href="politica_privacidad.php" style="color: #ffdd57; text-decoration: none;">Política de privacidad</a>
+    </p>
+</footer>
+
+
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     

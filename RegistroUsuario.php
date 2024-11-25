@@ -16,7 +16,9 @@
 </head>
 <body>
 <?php
-    // Incluir la conexión
+
+    
+   // Incluir la conexión
     require 'conexion.php';
     ?>
 
@@ -57,6 +59,7 @@
         <option value="" disabled selected>Selecciona el rol</option>
         <option value="admin">Admin</option>
         <option value="usuario">Usuario</option>
+        <option value="operador">Operador</option>
     </select>
 </div>
 

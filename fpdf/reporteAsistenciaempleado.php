@@ -106,6 +106,6 @@ while ($asistencia = $consulta_reporte_asistenciaempleado->fetch(PDO::FETCH_ASSO
     $pdf->Cell(60, 10, utf8_decode($asistencia['fecha_salida']), 1, 0, 'C', 0);
     $pdf->Cell(60, 10, utf8_decode($duracion), 1, 1, 'C', 0);
 }
-
 $pdf->Output('Reporte_Asistencia_Empleados.pdf', 'I'); // I para mostrar en navegador, D para descargar
 ?>
+

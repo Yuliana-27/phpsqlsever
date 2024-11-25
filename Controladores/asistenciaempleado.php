@@ -77,6 +77,19 @@ $asistencias = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </a>
         </div>
 
+        <div class="d-flex justify-content-end mb-2">
+    <form method="POST" action="../fpdf/reporteAsistenciaFecha.php" target="_blank" class="d-flex align-items-center ms-3 mt-3">
+        <input type="date" name="fecha_inicio" class="form-control me-2" required>
+        <input type="date" name="fecha_fin" class="form-control me-2" required>
+        <button type="submit" class="btn btn-secondary">
+            <i class="bi bi-calendar2-range-fill me-2"></i> R.Fecha
+        </button>
+    </form>
+</div>
+
+
+        
+
         <!-- Tabla de asistencia -->
         <form method="POST">
             <table class="table table-striped table-hover">
