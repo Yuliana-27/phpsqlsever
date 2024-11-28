@@ -5,20 +5,20 @@ $rol = $_SESSION['rol']; // Asegúrate de guardar el rol cuando el usuario inici
 if ($rol === 'admin') {
     // Mostrar solo la opción de registro
     echo '<a href="panelqr.php">Agregar</a>';
-    echo '<a href="actualizacionesempleado.php">Actualizar Empleados</a>';
-    echo '<a href="actualizacionesinvitado.php">Actualizar Invitados</a>';
-    echo '<a href="actualizacionesproveedor.php">Actualizar Proveedores</a>';
-    echo '<a href="actualizacionesusuario.php">Actualizar Usuarios</a>';
-    echo '<a href="asistenciaempleado.php">Asistencia Empleados</a>';
-    echo '<a href="asistenciainvitado.php">Asistencia Invitados</a>';
-    echo '<a href="asistenciaproveedor.php">Asistencia Proveedores</a>';
-    echo '<a href="procesar_entrada_salida.html">Registro</a>';
+    echo '<a href="actualizacionesempleado.php"></a>';
+    echo '<a href="actualizacionesinvitado.php"></a>';
+    echo '<a href="actualizacionesproveedor.php"></a>';
+    echo '<a href="actualizacionesusuario.php"></a>';
+    echo '<a href="asistenciaempleado.php"></a>';
+    echo '<a href="asistenciainvitado.php"></a>';
+    echo '<a href="asistenciaproveedor.php"></a>';
+    echo '<a href="procesar_entrada_salida.html"></a>';
 } elseif ($rol === 'operador') {
     // Mostrar todas las opciones
-    echo '<a href="procesar_entrada_salida.html">Registro</a>';
+    echo '<a href="procesar_entrada_salida.html"></a>';
 } elseif ($rol === 'usuario') {
     // Mostrar solo la opción de agregar invitados y proveedores
-    echo '<a href="panelqr.php">Agregar Invitados</a>';
+    echo '<a href="panelqr.php"></a>';
 
 }
 ?>
@@ -36,6 +36,13 @@ if ($rol === 'admin') {
         body {
             background-color: aliceblue;
         }
+        h4 {
+            font-family: 'Georgia', serif;
+        font-style: italic;
+        font-size: 14px;
+        line-height: 1.5;
+        }
+
     </style>
 </head>
 <body>
@@ -50,41 +57,49 @@ if ($rol === 'admin') {
     require './Perfil/navbar.php'
     ?>
 
-    <!-- Contenedor Principal (50% de la pantalla) -->
-    <div class="container w-50 mt-5 shadow p-5 bg-transparent rounded text-center">
-        <!-- Logo -->
-        <div class="text-center mb-4">
-            <img src="img/Palladium.png" width="55" alt="">
-            <img src="img/gp_hotels.png" width="55" alt="">
-            <img src="img/TRS.png" width="55" alt="">
-            <img src="img/ayre.png" width="55" alt="">
-            <img src="img/fiesta.png" width="55" alt="">
-            <img src="img/hardrock.jpg" width="55" alt="">
-            <img src="img/oy-logo.png" width="55" alt="">
-            <img src="img/ushuaia.png" width="55" alt="">
-            <img src="img/pbh-logo.png" width="55" alt="">
+     <!-- Contenedor Principal -->
+     <div class="container mt-5">
+        <!-- Logos -->
+        <div class="row justify-content-center mb-5">
+            <div class="col-3 col-md-1 text-center">
+                <img src="img/Palladium.png" class="img-fluid" alt="Logo Palladium">
+            </div>
+            <div class="col-3 col-md-1 text-center">
+                <img src="img/gp_hotels.png" class="img-fluid" alt="Logo GP Hotels">
+            </div>
+            <div class="col-3 col-md-1 text-center">
+                <img src="img/TRS.png" class="img-fluid" alt="Logo TRS">
+            </div>
+            <div class="col-3 col-md-1 text-center">
+                <img src="img/ayre.png" class="img-fluid" alt="Logo Ayre">
+            </div>
+            <div class="col-3 col-md-1 text-center">
+                <img src="img/fiesta.png" class="img-fluid" alt="Logo Fiesta">
+            </div>
+            <div class="col-3 col-md-1 text-center">
+                <img src="img/oy-logo.png" class="img-fluid" alt="Logo OY">
+            </div>
+            <div class="col-3 col-md-1 text-center">
+                <img src="img/pbh-logo.png" class="img-fluid" alt="Logo PBH">
+            </div>
         </div>
 
-        <?php if ($rol !== 'operador'): ?>
-    <div class="container">
-    <h2 class="text-center mb-4">Panel de Registro</h2>
-        
-        <!-- Selector de tipo de registro -->
-        <div class="text-center mb-5">
-            <h4>Seleccione el tipo de usuario a registrar:</h4>
-            <div class="btn-group" role="group" aria-label="Opciones de Registro">
-            
-                <button  class="btn btn-outline-primary" id="btnEmpleado">Registrar Empleado</button>
-            
-                <button  class="btn btn-outline-secondary" id="btnInvitado">Registrar Invitado</button>
-                <button  class="btn btn-outline-success" id="btnProveedor">Registrar Proveedor</button>
-            </div>
+        <!-- Panel de Registro -->
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-8 col-lg-6 shadow p-4 bg-white rounded">
+                <?php if ($rol !== 'operador'): ?>
+                    <h2 class="text-center mb-4"><strong>Panel de Registro</strong></h2>
+                    <div class="text-center mb-3">
+                        <h4>Seleccione el tipo de usuario a registrar:</h4>
+                        <div class="btn-group d-flex" role="group" aria-label="Opciones de Registro">
+                            <button class="btn btn-outline-primary w-100" id="btnEmpleado">Empleado</button>
+                            <button class="btn btn-outline-secondary w-100" id="btnInvitado">Invitado</button>
+                            <button class="btn btn-outline-success w-100" id="btnProveedor">Proveedor</button>
+                        </div>
+                
 
-        <!--aqui cierra el contendor de registro dinamico como el del registro-->
-        <!-- Formulario dinámico que se mostrará según la selección -->
         <div id="formContainer" class="p-4 shadow rounded bg-white"></div>
-        
-    </div>
+
     <?php else: ?>
         <!-- Mensaje alternativo para el operador -->
         
@@ -211,7 +226,6 @@ if ($rol === 'admin') {
         }
 
         // Formulario de registro de invitados
-    
         function formInvitado() {
             clearForm();
             formContainer.innerHTML = `
@@ -232,9 +246,7 @@ if ($rol === 'admin') {
                     <label for="duracion" class="form-label">Duración Del Qr<span class="text-danger">*</span></label>
                         <select class="form-control" id="duracion" name="duracion" required>
                             <option value="" disabled selected>Selecciona una opción</option>
-                            <option value="1">1 día</option>
                             <option value="3">3 días</option>
-                            <option value="5">5 días</option>
                         </select>
                     </div>
 
@@ -280,9 +292,7 @@ if ($rol === 'admin') {
                     <label for="duracion" class="form-label">Duración Del Qr<span class="text-danger">*</span></label>
                         <select class="form-control" id="duracion" name="duracion" required>
                             <option value="" disabled selected>Selecciona una opción</option>
-                            <option value="1">1 día</option>
                             <option value="3">3 días</option>
-                            <option value="5">5 días</option>
                         </select>
                     </div>
 
@@ -306,7 +316,7 @@ if ($rol === 'admin') {
                 </form>
             `;
         }
-        
+    
 
         // Asignar eventos a los botones
         btnEmpleado.addEventListener('click', formEmpleado);

@@ -190,7 +190,9 @@ $empleados = $stmt->fetchAll(PDO::FETCH_ASSOC);
             $stmt->execute([$id]);
             $empleado = $stmt->fetch(PDO::FETCH_ASSOC);
         ?>
-        <form method="POST" class="mb-4">
+        <div class="container d-flex justify-content-center my-4">
+        <div class="w-100 p-4 bg-light border rounded shadow">
+        <form method="POST">
             <input type="hidden" name="id" value="<?php echo $id; ?>">
             <div class="mb-3">
                 <label for="nombre_apellido" class="form-label">Nombre</label>
@@ -240,7 +242,9 @@ $empleados = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <input type="text" class="form-control" id="qr_code" name="qr_code" value="<?php echo $empleado['qr_code']; ?>" required>
             </div>
             <button type="submit" name="actualizar" class="btn btn-primary">Actualizar</button>
-        </form>
+            </form>
+    </div>
+</div>
         <?php endif; ?>
 
         <div class="d-flex justify-content-end mb-2">

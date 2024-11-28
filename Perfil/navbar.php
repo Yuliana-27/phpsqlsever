@@ -17,68 +17,70 @@ $rol = isset($_SESSION['rol']) ? $_SESSION['rol'] : 'usuario'; // Si no se defin
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
     <style>
-        .offcanvas-header img {
-            max-width: 100px; /* Ajusta el tamaño de la imagen de usuario */
-            margin-top: 10px;
-        }
+    /* Ajustes generales */
+    .offcanvas-header img {
+        max-width: 80px; /* Reduce el tamaño para móviles */
+        margin-top: 10px;
+    }
 
-        
-        
-
-        .nav-tabs {
-            justify-content: center; /* Asegurarse de que las pestañas también estén centradas */
-        }
-
-        .user-info {
-            text-align: center;
-            margin-top: 10px;
-        }
-
-        .user-info {
+    .user-info {
         font-family: 'Georgia', serif;
         font-style: italic;
-        font-size: 15px;
+        font-size: 14px;
         line-height: 1.5;
     }
 
     .offcanvas-body {
         font-family: 'Georgia', serif;
         font-style: italic;
+        overflow-y: auto; /* Habilita desplazamiento vertical */
+        max-height: 50vh; /* Ajuste dinámico para pantallas pequeñas */
     }
+
+     /* Estilo general para nav-tabs */
+      .nav-tabs {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); /* Distribuir en columnas flexibles */
+        grid-auto-rows: auto; /* Asegura que las filas se ajusten automáticamente */
+        gap: 10px; /* Espaciado entre elementos */
+        justify-content: center; /* Centra los elementos en el contenedor */
+    }
+
+     /* Estilo general para los elementos de las pestañas */
+    .nav-item {
+        text-align: center; /* Centra el contenido */
+        padding: 5px; /* Espaciado interno */
+    }
+
 
     .nav-link {
-        font-size: 12px;
+        font-size: 14px; /* Tamaño dinámico */
         font-weight: bold;
+        text-align: center;
     }
-    /*Nuevo bloque de estilos para los iconos */
-    /* Tamaño de los iconos */
+
     .nav-item i {
-            font-size: 1.3rem; /* Aumenta el tamaño de los iconos */
-            margin-right: 3px; /* Espacio entre el icono y el texto */
-        }
+        font-size: 1.2rem; /* Ajusta el tamaño de los íconos */
+        margin-right: 5px; /* Espacio entre ícono y texto */
+    }
 
-        /* Alineación en pares */
-        .offcanvas-body .nav-tabs {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr); /* Dos columnas */
-            gap: 10px; /* Espacio entre los elementos */
-            justify-items: center; /* Alinear cada elemento al centro */
+     /* Media query para pantallas grandes: 4 columnas */
+     @media (min-width: 768px) {
+        .nav-tabs {
+            grid-template-columns: repeat(3, 1fr); /* Cambia a cuatro columnas */
         }
+    }
 
-        /* Permitir desplazamiento */
-        .offcanvas-body {
-            overflow-y: auto; /* Habilita el desplazamiento vertical */
-            max-height: 80vh; /* Limita la altura para que se ajuste al viewport */
+    /* Media query para pantallas pequeñas: 2 filas */
+    @media (max-width: 767px) {
+        .nav-tabs {
+            grid-template-columns: repeat(2, 1fr); /* Mantiene dos columnas */
+            grid-auto-rows: auto; /* Asegura el ajuste dinámico de filas */
         }
+    }
 
-        /* Ajuste del botón de cierre */
-        .offcanvas-header .btn-close {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-        }
+</style>
 
-    </style>
 </head>
 <body>
     <nav class="navbar bg-body-tertiary fixed-top">
@@ -153,30 +155,6 @@ $rol = isset($_SESSION['rol']) ? $_SESSION['rol'] : 'usuario'; // Si no se defin
                             <i class="bi bi-journal"></i>Registro de E/S</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active" href="./Controladores/actualizacionesempleado.php">
-                            <i class="bi bi-book"></i>Cátalago de Empleados</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" href="./Controladores/asistenciaempleado.php">
-                            <i class="bi bi-journal-check"></i>Asistencia Empleado</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" href="./Controladores/actualizacionesproveedor.php">
-                            <i class="bi bi-book"></i>Cátalago de Proveedores</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" href="./Controladores/asistenciaproveedor.php">
-                            <i class="bi bi-journal-check"></i>Asistencia Proveedores</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" href="./Controladores/actualizacionesinvitado.php">
-                            <i class="bi bi-book"></i>Cátalago de Invitados</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" href="./Controladores/asistenciainvitado.php">
-                            <i class="bi bi-journal-check"></i>Asistencia Invitado</a>
-                        </li>
-                        <li class="nav-item">
                             <a class="nav-link active" href="./Controladores/actualizacionesusuario.php">
                             <i class="bi bi-book"></i>Cátalago de Usuarios</a>
                         </li>
@@ -184,6 +162,31 @@ $rol = isset($_SESSION['rol']) ? $_SESSION['rol'] : 'usuario'; // Si no se defin
                             <a class="nav-link active" href="./Controladores/actualizacionesempresa.php">
                             <i class="bi bi-info-circle"></i>Información de la Empresa</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="./Controladores/actualizacionesempleado.php">
+                            <i class="bi bi-book"></i>Cátalago de Empleados</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="./Controladores/actualizacionesinvitado.php">
+                            <i class="bi bi-book"></i>Cátalago de Invitados</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="./Controladores/actualizacionesproveedor.php">
+                            <i class="bi bi-book"></i>Cátalago de Proveedores</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="./Controladores/asistenciaempleado.php">
+                            <i class="bi bi-journal-check"></i>Asistencia Empleado</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="./Controladores/asistenciainvitado.php">
+                            <i class="bi bi-journal-check"></i>Asistencia Invitado</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="./Controladores/asistenciaproveedor.php">
+                            <i class="bi bi-journal-check"></i>Asistencia Proveedores</a>
+                        </li>
+                    
                         <?php endif; ?>
                     </ul>
                 </div>

@@ -15,10 +15,13 @@
             background-color: aliceblue;
         }
 
+        /* Hacer que el lector de QR sea responsivo */
         #qr-reader {
-            width: 500px;
+            max-width: 100%;
+            height: auto;
             margin: 0 auto;
         }
+
         /* Estilos para la alerta flotante */
         .alert-float {
             position: fixed;
@@ -31,20 +34,49 @@
             max-width: 90%;
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
         }
+
+        /* Mejorar el espaciado y la disposición para pantallas pequeñas */
+        .container {
+            padding: 15px;
+        }
+
+        /* Botones responsivos */
+        .btn {
+            width: 100%;
+        }
+
+        /* Asegura que los botones no se solapen en pantallas pequeñas */
+        @media (min-width: 576px) {
+            .btn {
+                width: auto;
+                margin-right: 10px;
+            }
+
+            #qr-reader {
+                width: 80%;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container mt-5">
         <h2 class="text-center">Lectura de Código QR</h2>
-        <div id="qr-reader" class="text-center"></div>
+        <div id="qr-reader" class="text-center mb-3"></div>
         <div id="qr-reader-results" class="text-center mt-3"></div>
 
         <form id="qr-form" class="text-center">
             <input type="hidden" name="qr_data" id="qr_data">
             <input type="hidden" name="action" id="action" value="" >
 
-            <button type="button"  class="btn btn-primary mt-3"onclick="setAction('entrada')">Registrar Entrada</button>
-            <button type="button" class="btn btn-primary mt-3" onclick="setAction('salida')">Registrar Salida</button>
+            <!-- Botones con diseño responsivo -->
+            <div class="row">
+                <div class="col-12 col-md-6">
+                    <button type="button" class="btn btn-primary mt-3" onclick="setAction('entrada')">Registrar Entrada</button>
+                </div>
+                <div class="col-12 col-md-6">
+                    <button type="button" class="btn btn-primary mt-3" onclick="setAction('salida')">Registrar Salida</button>
+                </div>
+            </div>
         </form>
     </div>
 
@@ -53,48 +85,34 @@
 
     <script>
         function onScanSuccess(decodedText) {
-            // Mostrar el texto decodificado en la consola y en el formulario oculto
             document.getElementById("qr_data").value = decodedText;
             document.getElementById("qr-reader-results").innerText = `QR Code: ${decodedText}`;
-
         }
 
         function setAction(actionType) {
-    document.getElementById('action').value = actionType;
-    const qrData = document.getElementById("qr_data").value; // Obtener el QR escaneado
+            document.getElementById('action').value = actionType;
 
-    if (!qrData) {
-        showAlert("No se ha escaneado un código QR.", 'danger');
-        return;
-    }
+            const formData = new FormData(document.getElementById("qr-form"));
 
-    // Enviar datos con AJAX
-    const formData = new FormData(document.getElementById("qr-form"));
+            fetch('procesar_qr.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const alertMessage = actionType === 'entrada' ? 'Entrada Registrada Correctamente' : 'Salida Registrada Correctamente';
+                    showAlert(alertMessage, 'success');
+                } else {
+                    showAlert(data.message, 'danger');
+                }
 
-    fetch('procesar_qr.php',{
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            const alertMessage = actionType === 'entrada' ? 'Entrada Registrada Correctamente' : 'Salida Registrada Correctamente';
-            showAlert(alertMessage, 'success');
-        } else {
-            showAlert(data.message, 'danger');
+                setTimeout(() => {
+                    window.location.reload();
+                }, 3500);
+            })
+            .catch(() => showAlert("Error en la solicitud", 'danger'));
         }
-
-        // Recargar la pagina después de 3.5 segundos, después de mostrar el mensaje
-        setTimeout(() => {
-            window.location.reload();
-        }, 3500);
-    })
-    .catch(error => {
-        console.error('Error en la Solicitud:', error);
-        showAlert("Error en la solicitud", 'danger');
-    });
-}
-
 
         function showAlert(message, type){
             const alertDiv = document.getElementById("alert-float");
@@ -104,15 +122,13 @@
 
             setTimeout(() =>{
                 alertDiv.style.display = 'none';
-            }, 3000);//Ocultar alerta despues de 3 segundos
+            }, 3000);
         }
 
         function onScanFailure(error) {
-            // Ocurre si no se puede escanear el QR
             console.warn(`Code scan error = ${error}`);
         }
 
-        // Crear el objeto Html5QrcodeScanner
         let html5QrCodeScanner = new Html5QrcodeScanner(
             "qr-reader", { fps: 10, qrbox: 250 });
         html5QrCodeScanner.render(onScanSuccess, onScanFailure);

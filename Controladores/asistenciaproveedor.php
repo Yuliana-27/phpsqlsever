@@ -70,15 +70,13 @@ $asistencias = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </div>
         </form>
 
-        <div class="d-flex justify-content-end mb-2">
+        <div class="d-flex justify-content-between mb-3">
             <!-- Enlace a la derecha con margen superior y mejor formato -->
-            <a href="../fpdf/reporteAsistenciaproveedor.php" target="_blank" class="btn btn-primary d-flex align-items-center ms-3 mt-3">
+            <a href="../fpdf/reporteAsistenciaproveedor.php" target="_blank" class="btn btn-primary d-flex align-items-center">
                 <i class="bi bi-file-earmark-pdf-fill me-2"></i> Generar Reporte
             </a>
-        </div>
 
-        <div class="d-flex justify-content-end mb-2">
-    <form method="POST" action="../fpdf/Reporte3.php" target="_blank" class="d-flex align-items-center ms-3 mt-3">
+    <form method="POST" action="../fpdf/Reporte3.php" target="_blank" class="d-flex align-items-center">
         <input type="date" name="fecha_inicio" class="form-control me-2" required>
         <input type="date" name="fecha_fin" class="form-control me-2" required>
         <button type="submit" class="btn btn-secondary">
@@ -90,7 +88,7 @@ $asistencias = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <!-- Formulario para eliminación múltiple -->
         <form method="POST">
             <!-- Tabla de asistencia -->
-            <table class="table table-striped table-hover">
+            <table class="table table-striped table-hover table-responsive-sm">
                 <thead class="table-dark">
                     <tr>
                         <th><input type="checkbox" id="selectAll" onclick="toggleSelectAll(this)"></th>

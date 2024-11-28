@@ -109,8 +109,8 @@ $usuarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <?php endif; ?>
 
         <!-- Tabla de usuarios -->
-        <table class="table table-striped table-hover">
-            <thead class="table-dark">
+        <table class="table table-striped table-hover table-responsive-sm">
+                <thead class="table-dark">
                 <tr>
                     <th>ID</th>
                     <th>Nombre</th>
