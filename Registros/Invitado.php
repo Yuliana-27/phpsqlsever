@@ -56,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $fechaExpiracion = $fechaActual->modify("+3 days")->format('Y-m-d H:i:s');
 
     // Generar el contenido del código QR
-    $contenidoQR = "invitado|$nombre|\n$areaAsiste|\n$placas|\n$modeloMarca|\n$color|\n$fechaExpiracion";
+    $contenidoQR = "invitado|$nombre|\nAsistencia:$areaAsiste|\nPlacas:$placas|\nVehículo:$modeloMarca|\nColor:$color|\nExpira:$fechaExpiracion";
     $filename = "../img_qr/qr_". $nombre . ".png";
 
     QRcode::png($contenidoQR, $filename, QR_ECLEVEL_L, 4);

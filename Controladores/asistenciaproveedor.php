@@ -85,6 +85,18 @@ $asistencias = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </form>
 </div>
 
+       <!-- Formulario para generar reporte por persona y fechas -->
+       <div class="d-flex justify-content-between mb-3">
+    <form method="POST" action="../fpdf/ReportePersona2.php" target="_blank" class="d-flex align-items-center  ms-auto">
+        <input type="text" name="proveedor" class="form-control me-2" placeholder="Proveedor" required>
+        <input type="date" name="fecha_inicio" class="form-control me-2" required>
+        <input type="date" name="fecha_fin" class="form-control me-2" required>
+        <button type="submit" class="btn btn-warning">
+            <i class="bi bi-person-lines-fill me-2"></i> R. Proveedor
+        </button>
+    </form>
+</div>
+
         <!-- Formulario para eliminación múltiple -->
         <form method="POST">
             <!-- Tabla de asistencia -->

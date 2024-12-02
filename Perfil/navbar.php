@@ -64,7 +64,7 @@ $rol = isset($_SESSION['rol']) ? $_SESSION['rol'] : 'usuario'; // Si no se defin
         margin-right: 5px; /* Espacio entre ícono y texto */
     }
 
-     /* Media query para pantallas grandes: 4 columnas */
+     /* Media query para pantallas grandes: 3 columnas */
      @media (min-width: 768px) {
         .nav-tabs {
             grid-template-columns: repeat(3, 1fr); /* Cambia a cuatro columnas */

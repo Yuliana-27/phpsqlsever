@@ -43,6 +43,10 @@ if ($rol === 'admin') {
         line-height: 1.5;
         }
 
+        .container {  
+        padding-top: 10px; /* Reducir el espacio superior */
+    }
+
     </style>
 </head>
 <body>
